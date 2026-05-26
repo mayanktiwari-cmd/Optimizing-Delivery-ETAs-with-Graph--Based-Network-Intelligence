@@ -430,7 +430,7 @@ elif page == "Bottleneck Analysis":
     st.markdown('<div class="section-title">Betweenness vs Breach Rate</div>', unsafe_allow_html=True)
     st.markdown('<div class="dlv-info">Each point is a facility. Size = in-degree (volume received). Position = structural risk vs operational delay rate.</div>', unsafe_allow_html=True)
 
-    fig, ax = plt.subplots(figsize=(12, 6))
+    fig, ax = plt.subplots(figsize=(14, 7))
     sc = ax.scatter(
         hub_df['betweenness'],
         hub_df['avg_breach_rate'],
@@ -443,18 +443,27 @@ elif page == "Bottleneck Analysis":
     )
     cb = plt.colorbar(sc, ax=ax)
     cb.set_label('Risk Score', fontsize=10)
-    for _, row in hub_df.head(8).iterrows():
+    label_offsets = [
+        (0.008, 0.04), (-0.006, 0.05), (0.006, -0.06),
+        (-0.008, -0.05), (0.010, 0.03), (-0.010, 0.06),
+        (0.007, -0.07), (0.012, 0.05),
+    ]
+    for i, (_, row) in enumerate(hub_df.head(8).iterrows()):
+        ox, oy = label_offsets[i % len(label_offsets)]
         ax.annotate(
-            str(row['hub_name'])[:18],
-            (row['betweenness'], row['avg_breach_rate']),
-            fontsize=7.5,
-            color='#F0F0F0',
-            alpha=0.9
+            str(row["hub_name"])[:22],
+            xy=(row["betweenness"], row["avg_breach_rate"]),
+            xytext=(row["betweenness"] + ox, row["avg_breach_rate"] + oy),
+            fontsize=8, color="#F0F0F0", fontweight="bold",
+            bbox=dict(boxstyle="round,pad=0.3", facecolor="#1E1E1E",
+                      edgecolor="#E8192C", linewidth=0.8, alpha=0.85),
+            arrowprops=dict(arrowstyle="->", color="#E8192C",
+                           lw=0.8, connectionstyle="arc3,rad=0.1"),
         )
-    ax.axhline(0.2, color=DLV_RED, linestyle='--', lw=1, alpha=0.5, label='20% breach line')
-    ax.set_xlabel('Betweenness Centrality — structural chokepoint score', fontsize=10)
-    ax.set_ylabel('Average SLA Breach Rate', fontsize=10)
-    ax.set_title('Hub Risk Map', fontsize=13, fontweight='bold', pad=12)
+    ax.axhline(0.2, color=DLV_RED, linestyle="--", lw=1, alpha=0.5, label="20% breach threshold")
+    ax.set_xlabel("Betweenness Centrality — structural chokepoint score", fontsize=10)
+    ax.set_ylabel("Average SLA Breach Rate", fontsize=10)
+    ax.set_title("Hub Risk Map — Top 8 Critical Hubs Labelled", fontsize=13, fontweight="bold", pad=12)
     ax.legend(fontsize=9)
     ax.grid(True)
     fig.tight_layout()
@@ -579,7 +588,7 @@ elif page == "Model Performance":
 
         if os.path.exists('outputs/feature_importance.png'):
             st.markdown('<div class="section-title">Feature Importance — Graph-Enhanced Model</div>', unsafe_allow_html=True)
-            st.image('outputs/feature_importance.png', use_column_width=True)
+            st.image('outputs/feature_importance.png', use_container_width=True)
 
     else:
         st.markdown("""
@@ -598,20 +607,21 @@ elif page == "Route Type Framework":
 
     if os.path.exists('outputs/ftl_tradeoff.csv'):
 
-        col1, col2 = st.columns(2)
-        with col1:
-            if os.path.exists('outputs/ftl_eval.png'):
-                st.markdown('<div class="section-title">Model Evaluation</div>', unsafe_allow_html=True)
-                st.image('outputs/ftl_eval.png', use_column_width=True)
-        with col2:
-            img = 'outputs/shap_summary.png' if os.path.exists('outputs/shap_summary.png') else 'outputs/ftl_importance.png'
-            if os.path.exists(img):
-                st.markdown('<div class="section-title">Feature Drivers</div>', unsafe_allow_html=True)
-                st.image(img, use_column_width=True)
+        # Model evaluation — full width
+        if os.path.exists('outputs/ftl_eval.png'):
+            st.markdown('<div class="section-title">Model Evaluation</div>', unsafe_allow_html=True)
+            st.image('outputs/ftl_eval.png', use_container_width=True)
+
+        # SHAP — full width so it's readable
+        img = 'outputs/shap_summary.png' if os.path.exists('outputs/shap_summary.png') else 'outputs/ftl_importance.png'
+        if os.path.exists(img):
+            st.markdown('<div class="section-title">Feature Drivers — What Determines FTL vs Carting?</div>', unsafe_allow_html=True)
+            st.markdown('<div class="dlv-info">Each row is a feature. Dot position = impact direction. Color = feature value (pink = high, blue = low). Width = how much it influences the decision.</div>', unsafe_allow_html=True)
+            st.image(img, use_container_width=True)
 
         if os.path.exists('outputs/ftl_tradeoff.png'):
             st.markdown('<div class="section-title">Cost-Time Tradeoff by Distance</div>', unsafe_allow_html=True)
-            st.image('outputs/ftl_tradeoff.png', use_column_width=True)
+            st.image('outputs/ftl_tradeoff.png', use_container_width=True)
 
         st.markdown('<div class="section-title">Route Recommender</div>', unsafe_allow_html=True)
 
@@ -702,4 +712,4 @@ elif page == "Interactive Network":
 
         if os.path.exists('outputs/network_static.png'):
             st.markdown('<div class="section-title">Static Network Preview</div>', unsafe_allow_html=True)
-            st.image('outputs/network_static.png', use_column_width=True)
+            st.image('outputs/network_static.png', use_container_width=True)
