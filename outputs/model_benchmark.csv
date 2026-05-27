@@ -1,4 +1,4 @@
 Model,MAE,RMSE,R2,Within_15pct
 OSRM (current system),19.92,51.16,0.0615,8.7
 Baseline XGBoost,14.24,36.98,0.48,24.6
-Graph-Enhanced XGBoost,13.35,33.78,0.5662,27.3
+Graph-Enhanced XGBoost,13.31,33.73,0.5675,27.7
