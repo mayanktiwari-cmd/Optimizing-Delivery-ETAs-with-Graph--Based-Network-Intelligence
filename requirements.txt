@@ -1,0 +1,9 @@
+pandas
+numpy
+matplotlib
+networkx
+scikit-learn
+xgboost
+pyvis
+streamlit
+pickle5
