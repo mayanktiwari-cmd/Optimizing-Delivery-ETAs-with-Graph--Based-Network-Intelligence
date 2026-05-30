@@ -1,9 +1,8 @@
-pandas
-numpy
-matplotlib
-networkx
-scikit-learn
-xgboost
-pyvis
-streamlit
-pickle5
+streamlit>=1.45
+pandas>=2.2
+numpy>=2.0
+matplotlib>=3.9
+networkx>=3.4
+scikit-learn>=1.5
+xgboost>=2.1
+pyvis>=0.3.2
