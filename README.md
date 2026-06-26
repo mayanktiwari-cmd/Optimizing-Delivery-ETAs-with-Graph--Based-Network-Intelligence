@@ -206,6 +206,7 @@ Problem statement: *Optimizing Delivery ETAs with Graph-Based Network Intelligen
 ## Team
 
 **Mayank Tiwari** — mayanktiwari-cmd
+**Ekas Babbar** - ekasbabbar
 
 ---
 
